@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
-
+from sklearn.model_selection import train_test_split
 
 def covariance(x, y):
     n = len(x)
@@ -20,9 +20,8 @@ df['Usage'] = df['Tgt'] + df['RushingAtt']
 df['UsageRank'] = df['Usage'].rank(ascending=False)
 df['FantasyPointsRank'] = df['FantasyPoints'].rank(ascending=False)
 
-df.sort_values(by='UsageRank').head(15)
+df.sort_values(by='UsageRank').head()
 
-x = df['Usage'].values
-y = df['FantasyPoints'].values
-
-correlation(x, y)
+X = df['Usage'].values
+Y = df['FantasyPoints'].values
+x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.2)
