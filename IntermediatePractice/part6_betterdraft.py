@@ -106,5 +106,8 @@ adp_df['ADPRANK'] = adp_df['AVG'].rank(method='first')
 
 df = df.merge(adp_df, how='left', on=['PLAYER', 'POS'])
 
+df['SLEEPERSCORE'] = df['ADPRANK'] - df['VALUERANK']
+print(df.loc[df['AVG'] < 192].sort_values(by='SLEEPERSCORE', ascending=False).head(15))
+
 #print(adp_df.head(30))
-print(df.head(5))
+#print(df.head(25))
