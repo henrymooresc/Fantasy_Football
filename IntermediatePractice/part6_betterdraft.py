@@ -2,6 +2,21 @@ from bs4 import BeautifulSoup as BS
 import requests
 import pandas as pd
 
+def remove_trailing_crap(ply_str):
+    ply_lst = ply_str.split()
+    team_names = ["ARI", "ATL", "BAL", "BUF", "CAR", "CIN", "CHI", "CLE", "DAL", "DEN", "DET", "GB", 
+    "HOU", "IND", "JAX", "KC", "LAC", "LAR", "LV", "MIA", "MIN", "NE", "NO", "NYG", "NYJ", "PHI", 
+    "PIT", "SEA", "SF", "TB", "TEN", "WAS"]
+
+    index = 0
+    for x in ply_lst:
+        if x in team_names:
+            break
+        else:
+            index += 1
+    
+    return ' '.join(ply_lst[:index])
+
 def make_adp_df(BASE_URL = "https://www.fantasypros.com/nfl/adp/ppr-overall.php") -> pd.DataFrame():
     res = requests.get(BASE_URL)
     if res.ok:
@@ -11,7 +26,10 @@ def make_adp_df(BASE_URL = "https://www.fantasypros.com/nfl/adp/ppr-overall.php"
         #print('Output after reading the html:\n\n', df.head(), '\n') # so you can see the output at this point
         df = df[['Player Team (Bye)', 'POS', 'AVG']]
         #print('Output after filtering:\n\n', df.head(), '\n')
-        df['PLAYER'] = df['Player Team (Bye)'].apply(lambda x: ' '.join(x.split()[:-2])) # removing the team and position
+        #df['PLAYER'] = df['Player Team (Bye)'].apply(lambda x: ' '.join(x.split()[:-2])) # removing the team and position
+
+        df['PLAYER'] = df['Player Team (Bye)'].apply(lambda x: remove_trailing_crap(x))
+
         df['POS'] = df['POS'].apply(lambda x: x[:2]) # removing the position rank
         
         df = df[['PLAYER', 'POS', 'AVG']].sort_values(by='AVG')
@@ -88,4 +106,5 @@ adp_df['ADPRANK'] = adp_df['AVG'].rank(method='first')
 
 df = df.merge(adp_df, how='left', on=['PLAYER', 'POS'])
 
-print(df.head(100))
+#print(adp_df.head(30))
+print(df.head(5))
