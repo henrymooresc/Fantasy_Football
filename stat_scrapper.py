@@ -28,7 +28,7 @@ def get_choices() -> list:
 def pull_from_pfr(url: str) -> pd.DataFrame:
     response = requests.get(url)
     soup = BS(response.content, 'html.parser')
-    table = soup.find('div', {'class': 'stats-grid-container'})
+    table = soup.find('table', attrs={'id': 'stats_grid'})
 
     df = pd.read_html(str(table))[0]
 
