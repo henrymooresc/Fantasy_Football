@@ -10,6 +10,7 @@ FD = {
     'pos': {1: 'All Offense', 2: 'QB', 3: 'RB', 4: 'WR', 5: 'TE', 6: 'K', 7: 'D/ST'}
 }
 
+# TODO: Add option to get full year and multiple weeks
 def get_choices() -> list:
     # runs through possible choices for urls, returns the formatted string
     print('Choose a position by its number')
